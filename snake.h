@@ -1,68 +1,77 @@
-#include <iostream>
-using namespace std;
+#include "nodo.h"
 
-class Node {
-	friend class Snake;
+class Snake
+{
+private:
+    Nodo *front;
+    Nodo *rear;
+public:
+    Snake();
+    bool is_empty();
+    void enqueue(int x, int y);
+    void dequeue(int &x, int &y);
+    void get_front(int &x, int &y);
+}
 
-	private:
-		int xpos, ypos;
-		Node *nextNode;
-};
+Snake::Snake()
+{
+    this->front = NULL;
+    this->rear = NULL;
+}
 
-class Snake {
-	private:
-		Node *front, *rear;
+bool Snake::is_empty()
+{
+    return (this->front == NULL);
+}
 
-	public:
-		Snake() {
-			front = new Node();
-			rear = new Node();
-			front = NULL;
-			rear = NULL;
-		}
+void Snake::insert_tail(int x, int y)
+{
+    Nodo *aux = new Nodo();
+    aux->pos_x = x;
+    aux->pos_y = y;
+    aux->sig = NULL;
 
-		void enqueue(int x, int y) {
-			Node* newNode = new Node();
-			newNode->xpos = x;
-			newNode->ypos = y;
-			newNode->nextNode = NULL;
+    if (this->rear == NULL)
+    {
+        this->rear == aux;
+        this->front = aux;
+    } else
+    {
+        this->rear->sig = aux;
+        this->rear = aux;
+    }
+}
 
-			if (rear == NULL) {
-				rear = newNode;
-				front = newNode;
-			}
-			else {
-				rear->nextNode = newNode;
-				rear = newNode;
-			}
-		}
+void Snake::clear_tail(int &x, int &y)
+{
+    if (!(this->is_empty()))
+    {
+        x = this->front->pos_x;
+        y = this->front->pos_y;
 
-		void dequeue(int& x, int& y) { // It will directly put data in given variables
-			if (!(this->isEmpty())) {
-				x = front->xpos;
-				y = front->ypos;
+        Nodo *aux = new Nodo();
+        aux = this->front;
+        this->front = this->front->sig;
+        delete aux;
 
-				Node *temp = front;
-				front = front->nextNode;
+        if (this->is_empty())
+        {
+            this->rear = NULL;
+        }
+    } else
+    {
+        std::cout << "la cola esta vacia" << std::endl;
+    }
+}
 
-				delete temp;
-
-				if(this->isEmpty())
-					rear = NULL;
-			}
-			else cout << "Queue is Empty.\n";
-		}
-
-		void getFront(int& x, int& y) { // only return the node data from front of queue
-			if (!(this->isEmpty())) {
-				x = front->xpos;
-				y = front->ypos;
-			}
-
-			else cout << "Queue is empty.\n";
-		}
-
-		bool isEmpty() {
-			return (front == NULL);
-		}
-};
+void Snake::get_front(int &x, int &y)
+{
+    if (!(this->is_empty()))
+    {
+        x = this->front->pos_x;
+        y = this->front->pos_y;
+    } else
+    {
+        std::cout << "la cola esta vacia" << std::endl;
+    }
+}
